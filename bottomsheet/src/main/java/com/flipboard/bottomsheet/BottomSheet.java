@@ -179,8 +179,13 @@ public class BottomSheet extends FrameLayout {
         getSheetView().setTranslationY(getHeight() - sheetTranslation);
         transformView(sheetTranslation);
 
-        float progress = Math.max(sheetTranslation - getPeekSheetTranslation(), 0) / (getHeight() - getPeekSheetTranslation());
-        dimView.setAlpha(shouldDimContentView ? progress * MAX_DIM_ALPHA : 0);
+        // ORIGINAL CODE FROM FLIPBOARD LIB:
+//        float progress = Math.max(sheetTranslation - getPeekSheetTranslation(), 0) / (getHeight() - getPeekSheetTranslation());
+//        dimView.setAlpha(shouldDimContentView ? peekProgress * MAX_DIM_ALPHA : 0);
+
+        // MATT'S CHANGE TO MAKE BEHAVIOR MATCH MATERIAL SPEC
+        float peekProgress = Math.min(sheetTranslation / getPeekSheetTranslation(), 1);
+        dimView.setAlpha(shouldDimContentView ? peekProgress * MAX_DIM_ALPHA : 0);
     }
 
     private void transformView(float sheetTranslation) {
